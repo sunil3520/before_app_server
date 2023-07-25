@@ -45,6 +45,10 @@ app.get('/auth/google/callback',
     res.json(req.user);
     res.redirect('/');
   });
+      
+  app.get("/" ,(req,res)=>{
+    res.status(200).send("Welcome to Befour.com")
+  })
 
 app.use("/user", userRouter)
 app.use("/products", productRouter)
