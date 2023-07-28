@@ -6,19 +6,19 @@ const multer=require("multer");
 const path=require("path");
 const { auth } = require("../middlewares/auth");
 
-const storage=multer.diskStorage({
-  destination:(req,file,cb)=>{
-   cb(null,path.join(__dirname,"../public/userProfileImages"))
-  },
-  filename:(req,file,cb)=>{
-    const name=Date.now()+"-"+file.originalname;
-    cb(null,name);
-  }
-})
+// const storage=multer.diskStorage({
+//   destination:(req,file,cb)=>{
+//    cb(null,path.join(__dirname,"../public/userProfileImages"))
+//   },
+//   filename:(req,file,cb)=>{
+//     const name=Date.now()+"-"+file.originalname;
+//     cb(null,name);
+//   }
+// })
 
-const upload=multer({storage:storage}); 
+// const upload=multer({storage:storage}); 
 
-userRouter.post("/register",upload.single("avatar"),registerFun ); 
+userRouter.post("/register",registerFun ); 
 userRouter.post("/login", loginFun);
 userRouter.get("/verifiy",verifiyMail)
 

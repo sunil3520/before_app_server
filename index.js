@@ -14,7 +14,7 @@ const { CartRouter } = require("./routes/cart.routes");
 const {paymentRouter} =require("./routes/payment.routes")
 const passport=require("passport");
 const { OrderRouter } = require("./routes/order.routes");
-const app = express() 
+const app = express()
  
 //middlewares
 app.use(express.json()) 
@@ -28,7 +28,7 @@ app.use(
   })
 );
 
-
+ 
 
 
 //google authentication with passport js
@@ -45,10 +45,6 @@ app.get('/auth/google/callback',
     res.json(req.user);
     res.redirect('/');
   });
-      
-  app.get("/" ,(req,res)=>{
-    res.status(200).send("Welcome to Befour.com")
-  })
 
 app.use("/user", userRouter)
 app.use("/products", productRouter)
@@ -66,10 +62,11 @@ app.listen(process.env.PORT, async () => {
 
     } catch (error) {
         console.log("Cannot connect to MongoDb")
+        console.log(error.message);
     }
     console.log(`Server running on port ${process.env.PORT}`)
 })
-
+ 
 
 
 

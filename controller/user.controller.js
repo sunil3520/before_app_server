@@ -80,7 +80,7 @@ const registerFun=async (req, res) => {
             password: hash,
             age,
             location, 
-           avatar:req.file.filename  
+          //  avatar:req.file.filename  
           });
          userDetail= await userDetail.save();
          if(userDetail){

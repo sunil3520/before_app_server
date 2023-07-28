@@ -4,7 +4,7 @@ const userSchema = mongoose.Schema(
   {
     name: {
       type:String,
-      required:true,
+      required:true,   
     },
     phone:{
       type:String,
@@ -13,22 +13,22 @@ const userSchema = mongoose.Schema(
     },
     email: {
       type:String,
-      required:true,  
-    },
+      required:true,    
+    },  
     password: {
       type:String,
       required: [true, "Please Enter Your Password"],
       minLength: [8, "Password should have atleast 8 char"],
     },
-    avatar:{
-      type:String,
-      required:true, 
-      default:"https://pinnacle.works/wp-content/uploads/2022/06/dummy-image.jpg"
-    },
+    // avatar:{
+    //   type:String,
+    //   required:true, 
+    //   default:"https://pinnacle.works/wp-content/uploads/2022/06/dummy-image.jpg"
+    // },
     role:{
        type:String,
        required:true, 
-       default:"user"
+       default:"user" 
     },
     isVerified:{
       type:Boolean,
@@ -36,7 +36,7 @@ const userSchema = mongoose.Schema(
       default:false, 
     }
     ,
-    age: Number,
+    age: Number,  
     location: String,
   },
   {
