@@ -8,6 +8,7 @@ require('dotenv').config();
 
 //for send mail
 const sendVerifyMail= async (name,email,user_id)=>{
+  return res.send("hello");
        const transporter= nodemailer.createTransport({
             // host:'smtp.gmail.com',
             // port:587,
