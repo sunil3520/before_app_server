@@ -10,13 +10,14 @@ require('dotenv').config();
 const sendVerifyMail=(name,email,user_id)=>{
     try {
        const transporter= nodemailer.createTransport({
-            host:'smtp.gmail.com',
-            port:587,
-            secure:false,
-            requireTLS:true,
+            // host:'smtp.gmail.com',
+            // port:587,
+            // secure:false,
+            // requireTLS:true,
+            service:'gmail',
             auth:{
-              user:'sunilchaudhary7789@gmail.com',
-              pass:`${process.env.PASSWORD}`
+              user:process.env.EMAIL,
+              pass:process.env.PASSWORD
             }
         })
 
@@ -30,12 +31,12 @@ const sendVerifyMail=(name,email,user_id)=>{
 
 
 
-
+ 
         const mailOptions={
-            from:'sunilchuadhary7789@gmail.com',
+            from:process.env.EMAIL,
             to:email,
             subject:'For Verification mail',
-            html:`<p>Hii ${name},please click here to <a href="https://ill-jade-gosling-shoe.cyclic.app/user/verifiy/?id=${user_id}">Verify</a>your mail </p>`
+            html:`<p>Hii ${name},please click here to <a href="http://localhost:8080/user/verifiy/?id=${user_id}">Verify</a>your mail </p>`
         }
 
         transporter.sendMail(mailOptions,(err,info)=>{
@@ -56,6 +57,7 @@ const verifiyMail=async(req,res)=>{
      try {
        const updatedInfo= await UserModel.updateOne({_id:req.query.id},{$set:{isVerified:true}});
        console.log(updatedInfo);
+       console.log(req.query.id)
        
         res.redirect("http://localhost:3000/user/login"); 
         // alert("Verify successfully")
