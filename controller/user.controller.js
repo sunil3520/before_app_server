@@ -59,15 +59,53 @@ const verifiyMail=async(req,res)=>{
      }
 }
 
+// const registerFun = async (req, res) => {
+//   const { name, email, password, phone, age, location, type, order } = req.body;
+
+//   try {
+//     // const user = await UserModel.findOne({ email });
+// const user=false
+//     if (!user) {
+//       // Generate hash for the password using async/await
+//       const hash = await bcrypt.hash(password, 2);
+
+//       let userDetail = await UserModel.create({
+//         name,
+//         email,
+//         phone,
+//         password: hash,
+//         age,
+//         location,
+//         // avatar: req.file.filename
+//       });
+
+//       // userDetail = await userDetail.save();
+
+//       if (userDetail) {
+//         await sendVerifyMail(name, email, userDetail._id);
+//         res.status(200).send({ msg: "User data submitted successfully, please verify your mail" });
+//       } else {
+//         res.status(401).send({ "msg": "Please Register again" });
+//       }
+//     } else if (!user.isVerified) {
+//       res.status(200).send({ "msg": "Please check your mail and verify" });
+//     } else {
+//       res.status(200).send({ msg: "User already exists, please login" });
+//     }
+//   } catch (error) {
+//     res.status(400).send({ msg: error.message });
+//   }
+// }
+
 const registerFun = async (req, res) => {
   const { name, email, password, phone, age, location, type, order } = req.body;
 
   try {
-    // const user = await UserModel.findOne({ email });
-const user=false
+    const user = await UserModel.findOne({ email });
+
     if (!user) {
       // Generate hash for the password using async/await
-      const hash = await bcrypt.hash(password, 2);
+      const hash = await bcrypt.hash(password, 10); // Increased the number of rounds for hashing
 
       let userDetail = await UserModel.create({
         name,
@@ -79,7 +117,7 @@ const user=false
         // avatar: req.file.filename
       });
 
-      // userDetail = await userDetail.save();
+      // No need to call userDetail.save() as the user is already saved with `UserModel.create`
 
       if (userDetail) {
         await sendVerifyMail(name, email, userDetail._id);
@@ -96,6 +134,7 @@ const user=false
     res.status(400).send({ msg: error.message });
   }
 }
+
 
  const loginFun = async (req, res) => {
   
