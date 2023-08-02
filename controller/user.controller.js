@@ -8,11 +8,11 @@ require('dotenv').config();
 
 //for send mail
 const sendVerifyMail= async (name,email,user_id)=>{
-  return res.send("hello");
+  console.log("hello1")
        const transporter= nodemailer.createTransport({
-            // host:'smtp.gmail.com',
-            // port:587,
-            // secure:false,
+            host:'smtp.gmail.com',
+            port:465,
+            secure:true,
             // requireTLS:true,
             service:'gmail',
             auth:{
@@ -20,6 +20,7 @@ const sendVerifyMail= async (name,email,user_id)=>{
               pass:process.env.PASSWORD
             }
         })
+        console.log("hello2")
 
         const mailOptions={
             from:process.env.EMAIL,
@@ -27,11 +28,14 @@ const sendVerifyMail= async (name,email,user_id)=>{
             subject:'For Verification mail',
             html:`<p>Hii ${name},please click here to <a href="http://localhost:8080/user/verifiy/?id=${user_id}">Verify</a>your mail </p>`
         }
+        console.log("hello3")
 
         transporter.sendMail(mailOptions,(err,info)=>{
             if(err){
+  console.log("hello4")
+
                 console.log(err);
-                res.send({err})
+                return res.send({err})
             }else{
                 console.log(`Email has been sent:- ${info.response}`);
             }
