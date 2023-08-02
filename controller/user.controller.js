@@ -64,12 +64,12 @@ const registerFun = async (req, res) => {
 
   try {
     // const user = await UserModel.findOne({ email });
-const user=undefined
+const user=false
     if (!user) {
       // Generate hash for the password using async/await
       const hash = await bcrypt.hash(password, 2);
 
-      let userDetail = new UserModel({
+      let userDetail = await UserModel.create({
         name,
         email,
         phone,
@@ -79,7 +79,7 @@ const user=undefined
         // avatar: req.file.filename
       });
 
-      userDetail = await userDetail.save();
+      // userDetail = await userDetail.save();
 
       if (userDetail) {
         await sendVerifyMail(name, email, userDetail._id);
