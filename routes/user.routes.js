@@ -17,10 +17,9 @@ const { auth } = require("../middlewares/auth");
 // })
 
 // const upload=multer({storage:storage}); 
-
+userRouter.get("/verifiy",verifiyMail)
 userRouter.post("/register",registerFun ); 
 userRouter.post("/login", loginFun);
-userRouter.get("/verifiy",verifiyMail)
 
 
 
