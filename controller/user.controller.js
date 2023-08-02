@@ -37,7 +37,7 @@ const sendVerifyMail=(name,email,user_id)=>{
                 console.log(`Email has been sent:- ${info.response}`);
             }
         })
-
+   
     
 }
 
