@@ -19,7 +19,7 @@ const sendVerifyMail= async (name,email,user_id)=>{
               pass:process.env.PASSWORD
             }
         })
-        
+
         const mailOptions={
             from:process.env.EMAIL,
             to:email,
@@ -54,42 +54,43 @@ const verifiyMail=async(req,res)=>{
      }
 }
 
-const registerFun=async (req, res) => {
-    const { name, email, password, phone, age, location,type, order } = req.body;
-  
-    const user = await UserModel.findOne({ email });
-  
-    if (!user) {
-      try {
-        bcrypt.hash(password, 2, async (err, hash) => {
-          let userDetail = new UserModel({
-            name,
-            email,
-            phone,
-            password: hash,
-            age,
-            location, 
-          //  avatar:req.file.filename  
-          });
-         userDetail= await userDetail.save();
-         if(userDetail){
-            
-           await sendVerifyMail(name,email,userDetail._id);
+const registerFun = async (req, res) => {
+  const { name, email, password, phone, age, location, type, order } = req.body;
 
-          res.status(200).send({ msg: "User data submitted successfully ,Please verify your mail" });
-         }else{
-            res.status(401).send({"msg":"Please Register again"})
-         }
-        });
-      } catch (error) {
-        res.status(400).send({ msg: error.message });
+  try {
+    const user = await UserModel.findOne({ email });
+
+    if (!user) {
+      // Generate hash for the password using async/await
+      const hash = await bcrypt.hash(password, 2);
+
+      let userDetail = new UserModel({
+        name,
+        email,
+        phone,
+        password: hash,
+        age,
+        location,
+        // avatar: req.file.filename
+      });
+
+      userDetail = await userDetail.save();
+
+      if (userDetail) {
+        await sendVerifyMail(name, email, userDetail._id);
+        res.status(200).send({ msg: "User data submitted successfully, please verify your mail" });
+      } else {
+        res.status(401).send({ "msg": "Please Register again" });
       }
-    } else if(!user.isVerified){
-      res.status(200).send({"msg":"Please check your mail and verify"})
-    }else{
-      res.status(200).send({msg:"User already exist please login"}) 
+    } else if (!user.isVerified) {
+      res.status(200).send({ "msg": "Please check your mail and verify" });
+    } else {
+      res.status(200).send({ msg: "User already exists, please login" });
     }
+  } catch (error) {
+    res.status(400).send({ msg: error.message });
   }
+}
 
  const loginFun = async (req, res) => {
   
