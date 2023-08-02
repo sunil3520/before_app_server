@@ -63,8 +63,8 @@ const registerFun = async (req, res) => {
   const { name, email, password, phone, age, location, type, order } = req.body;
 
   try {
-    const user = await UserModel.findOne({ email });
-
+    // const user = await UserModel.findOne({ email });
+const user=undefined
     if (!user) {
       // Generate hash for the password using async/await
       const hash = await bcrypt.hash(password, 2);
