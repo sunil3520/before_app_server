@@ -8,7 +8,7 @@ require('dotenv').config();
 
 //for send mail
 const sendVerifyMail=(name,email,user_id)=>{
-    try {
+    
        const transporter= nodemailer.createTransport({
             // host:'smtp.gmail.com',
             // port:587,
@@ -21,16 +21,6 @@ const sendVerifyMail=(name,email,user_id)=>{
             }
         })
 
-
-
-
-
-
-
-
-
-
-
  
         const mailOptions={
             from:process.env.EMAIL,
@@ -42,14 +32,13 @@ const sendVerifyMail=(name,email,user_id)=>{
         transporter.sendMail(mailOptions,(err,info)=>{
             if(err){
                 console.log(err);
+                res.send({err})
             }else{
                 console.log(`Email has been sent:- ${info.response}`);
             }
         })
 
-    } catch (error) {
-        console.log(error);
-    }
+    
 }
 
 const verifiyMail=async(req,res)=>{
@@ -87,7 +76,7 @@ const registerFun=async (req, res) => {
          userDetail= await userDetail.save();
          if(userDetail){
             
-            sendVerifyMail(name,email,userDetail._id);
+           await sendVerifyMail(name,email,userDetail._id);
 
           res.status(200).send({ msg: "User data submitted successfully ,Please verify your mail" });
          }else{
