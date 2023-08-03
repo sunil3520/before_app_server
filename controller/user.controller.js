@@ -7,12 +7,12 @@ require('dotenv').config();
 
 
 //for send mail
-const sendVerifyMail= async (name,email,user_id)=>{
-  console.log("hello1")
+const sendVerifyMail= async(name,email,user_id)=>{
+    
        const transporter= nodemailer.createTransport({
-            host:'smtp.gmail.com',
-            port:465,
-            secure:true,
+            // host:'smtp.gmail.com',
+            // port:587,
+            // secure:false,
             // requireTLS:true,
             service:'gmail',
             auth:{
@@ -20,22 +20,19 @@ const sendVerifyMail= async (name,email,user_id)=>{
               pass:process.env.PASSWORD
             }
         })
-        console.log("hello2")
 
+ 
         const mailOptions={
             from:process.env.EMAIL,
             to:email,
             subject:'For Verification mail',
             html:`<p>Hii ${name},please click here to <a href="http://localhost:8080/user/verifiy/?id=${user_id}">Verify</a>your mail </p>`
         }
-        console.log("hello3")
 
         transporter.sendMail(mailOptions,(err,info)=>{
             if(err){
-  console.log("hello4")
-
                 console.log(err);
-                return res.send({err})
+                res.send({err})
             }else{
                 console.log(`Email has been sent:- ${info.response}`);
             }
@@ -59,82 +56,42 @@ const verifiyMail=async(req,res)=>{
      }
 }
 
-// const registerFun = async (req, res) => {
-//   const { name, email, password, phone, age, location, type, order } = req.body;
-
-//   try {
-//     // const user = await UserModel.findOne({ email });
-// const user=false
-//     if (!user) {
-//       // Generate hash for the password using async/await
-//       const hash = await bcrypt.hash(password, 2);
-
-//       let userDetail = await UserModel.create({
-//         name,
-//         email,
-//         phone,
-//         password: hash,
-//         age,
-//         location,
-//         // avatar: req.file.filename
-//       });
-
-//       // userDetail = await userDetail.save();
-
-//       if (userDetail) {
-//         await sendVerifyMail(name, email, userDetail._id);
-//         res.status(200).send({ msg: "User data submitted successfully, please verify your mail" });
-//       } else {
-//         res.status(401).send({ "msg": "Please Register again" });
-//       }
-//     } else if (!user.isVerified) {
-//       res.status(200).send({ "msg": "Please check your mail and verify" });
-//     } else {
-//       res.status(200).send({ msg: "User already exists, please login" });
-//     }
-//   } catch (error) {
-//     res.status(400).send({ msg: error.message });
-//   }
-// }
-
-const registerFun = async (req, res) => {
-  const { name, email, password, phone, age, location, type, order } = req.body;
-
-  try {
-    // const user = await UserModel.findOne({ email });
-const user=false
+const registerFun=async (req, res) => {
+    const { name, email, password, phone, age, location,type, order } = req.body;
+  
+    const user = await UserModel.findOne({ email });
+  
     if (!user) {
-      // Generate hash for the password using async/await
-      const hash = bcrypt.hashSync(password, 10); // Increased the number of rounds for hashing
+      try {
+        bcrypt.hash(password, 2, async (err, hash) => {
+          let userDetail = new UserModel({
+            name,
+            email,
+            phone,
+            password: hash,
+            age,
+            location, 
+          //  avatar:req.file.filename  
+          });
+         userDetail= await userDetail.save();
+         if(userDetail){
+            
+           await sendVerifyMail(name,email,userDetail._id);
 
-      let userDetail = await UserModel.create({
-        name,
-        email,
-        phone,
-        password: hash,
-        age,
-        location,
-        // avatar: req.file.filename
-      });
-
-      // No need to call userDetail.save() as the user is already saved with `UserModel.create`
-
-      if (userDetail) {
-        await sendVerifyMail(name, email, userDetail._id);
-        res.status(200).send({ msg: "User data submitted successfully, please verify your mail" });
-      } else {
-        res.status(401).send({ "msg": "Please Register again" });
+          res.status(200).send({ msg: "User data submitted successfully ,Please verify your mail" });
+         }else{
+            res.status(401).send({"msg":"Please Register again"})
+         }
+        });
+      } catch (error) {
+        res.status(400).send({ msg: error.message });
       }
-    } else if (!user.isVerified) {
-      res.status(200).send({ "msg": "Please check your mail and verify" });
-    } else {
-      res.status(200).send({ msg: "User already exists, please login" });
+    } else if(!user.isVerified){
+      res.status(200).send({"msg":"Please check your mail and verify"})
+    }else{
+      res.status(200).send({msg:"User already exist please login"}) 
     }
-  } catch (error) {
-    res.status(400).send({ msg: error.message });
   }
-}
-
 
  const loginFun = async (req, res) => {
   
