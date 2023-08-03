@@ -28,7 +28,9 @@ app.use(
   })
 );
 
- 
+ app.get("/",(req,res)=>{
+  res.status(102).send({msg:"Welcome to Befour application"})
+ })
 
 
 //google authentication with passport js
