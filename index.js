@@ -29,7 +29,7 @@ app.use(
 );
 
  app.get("/",(req,res)=>{
-  res.status(102).send({msg:"Welcome to Befour application"})
+  res.status(201).send({msg:"Welcome to Befour application"})
  })
 
 
