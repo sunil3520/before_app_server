@@ -7,8 +7,8 @@ require('dotenv').config();
 
 
 //for send mail
-const sendVerifyMail= async(name,email,user_id)=>{
-    
+const sendVerifyMail= async (name,email,user_id)=>{
+    try {
        const transporter= nodemailer.createTransport({
             // host:'smtp.gmail.com',
             // port:587,
@@ -20,25 +20,25 @@ const sendVerifyMail= async(name,email,user_id)=>{
               pass:process.env.PASSWORD
             }
         })
-
  
         const mailOptions={
             from:process.env.EMAIL,
             to:email,
             subject:'For Verification mail',
-            html:`<p>Hii ${name},please click here to <a href="http://localhost:${process.env.PORT}/user/verifiy/?id=${user_id}">Verify</a>your mail </p>`
+            html:`<p>Hii ${name},please click here to <a href="http://localhost:${process.env.PORT}/user/verifiy/?id=${user_id}">  Verify </a>your mail </p>`
         }
 
         transporter.sendMail(mailOptions,(err,info)=>{
             if(err){
                 console.log(err);
-                res.send({err})
             }else{
                 console.log(`Email has been sent:- ${info.response}`);
             }
         })
-   
-    
+
+    } catch (error) {
+        console.log(error);
+    }
 }
 
 const verifiyMail=async(req,res)=>{
@@ -48,7 +48,7 @@ const verifiyMail=async(req,res)=>{
        console.log(updatedInfo);
        console.log(req.query.id)
        
-        res.redirect("http://localhost:3000/user/login"); 
+        res.redirect("https://frontend-sunil3520.vercel.app/user/login"); 
         // alert("Verify successfully")
        
      } catch (error) {
@@ -56,42 +56,42 @@ const verifiyMail=async(req,res)=>{
      }
 }
 
-const registerFun=async (req, res) => {
-    const { name, email, password, phone, age, location,type, order } = req.body;
-  
-    const user = await UserModel.findOne({ email });
-  
-    if (!user) {
-      try {
-        bcrypt.hash(password, 2, async (err, hash) => {
-          let userDetail = new UserModel({
-            name,
-            email,
-            phone,
-            password: hash,
-            age,
-            location, 
-          //  avatar:req.file.filename  
-          });
-         userDetail= await userDetail.save();
-         if(userDetail){
-            
-           await sendVerifyMail(name,email,userDetail._id);
+const registerFun = async (req, res) => {
+  const { name, email, password, phone, age, location, type, order } = req.body;
 
-          res.status(200).send({ msg: "User data submitted successfully ,Please verify your mail" });
-         }else{
-            res.status(401).send({"msg":"Please Register again"})
-         }
-        });
-      } catch (error) {
-        res.status(400).send({ msg: error.message });
+  try {
+    const user = await UserModel.findOne({ email });
+
+    if (!user) {
+      // Generate hash for the password using async/await
+      const hash = await bcrypt.hash(password, 2);
+
+      let userDetail = new UserModel({
+        name,
+        email,
+        phone,
+        password: hash,
+        age,
+        location,
+      });
+
+      userDetail = await userDetail.save();
+
+      if (userDetail) {
+        await sendVerifyMail(name, email, userDetail._id);
+        res.status(200).send({ msg: "User data submitted successfully, please verify your mail" });
+      } else {
+        res.status(401).send({ "msg": "Please Register again" });
       }
-    } else if(!user.isVerified){
-      res.status(200).send({"msg":"Please check your mail and verify"})
-    }else{
-      res.status(200).send({msg:"User already exist please login"}) 
+    } else if (!user.isVerified) {
+      res.status(200).send({ "msg": "Please check your mail and verify" });
+    } else {
+      res.status(200).send({ msg: "User already exists, please login" });
     }
+  } catch (error) {
+    res.status(400).send({ msg: error.message });
   }
+}
 
  const loginFun = async (req, res) => {
   
