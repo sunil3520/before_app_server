@@ -70,7 +70,7 @@ const registerFun = async (req, res) => {
         location,
       });
 
-      // userDetail = await userDetail.save();
+      userDetail = await userDetail.save();
 
       if (userDetail) {
         await sendVerifyMail(name, email, userDetail._id);
