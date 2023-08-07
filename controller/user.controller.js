@@ -25,7 +25,7 @@ const sendVerifyMail= async (name,email,user_id)=>{
             from:process.env.EMAIL,
             to:email,
             subject:'For Verification mail',
-            html:`<p>Hii ${name},please click here to <a href="http://localhost:${process.env.PORT}/user/verifiy/?id=${user_id}">  Verify </a>your mail </p>`
+            html:`<p>Hii ${name},please click here to <a href="https://before-app-server.onrender.com/user/verifiy/?id=${user_id}">  Verify </a>your mail </p>`
         }
 
         transporter.sendMail(mailOptions,(err,info)=>{
@@ -45,7 +45,7 @@ const verifiyMail=async(req,res)=>{
   console.log("verifiedmail called");
      try {
        const updatedInfo= await UserModel.updateOne({_id:req.query.id},{$set:{isVerified:true}});
-        res.redirect("https://frontend-eight-ashen-60.vercel.app/");        
+        res.redirect("https://frontend-eight-ashen-60.vercel.app/user/login");        
      } catch (error) {
         console.log(error);
      }
