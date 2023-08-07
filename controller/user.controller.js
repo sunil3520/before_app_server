@@ -45,7 +45,7 @@ const verifiyMail=async(req,res)=>{
   console.log("verifiedmail called");
      try {
        const updatedInfo= await UserModel.updateOne({_id:req.query.id},{$set:{isVerified:true}});
-        res.redirect("https://frontend-eight-ashen-60.vercel.app/user/login");        
+        res.redirect("https://frontend-eight-ashen-60.vercel.app");        
      } catch (error) {
         console.log(error);
      }
