@@ -59,7 +59,7 @@ const instance = new Razorpay({
 
     // res.status(200).send({"isAuthentic":isAuthentic})
     res.redirect(
-      `http://localhost:3000/paymentsuccess?reference=${razorpay_payment_id}`  
+      `${process.env.FRONTEND_DEPLOYMENT_URL}/paymentsuccess?reference=${razorpay_payment_id}`  
     );
   } else {
     res.status(400).json({
