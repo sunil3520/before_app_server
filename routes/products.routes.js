@@ -57,26 +57,30 @@ productRouter.get("/men", async (req, res) => {
   }
 });
 
-
 productRouter.get("/women", async (req, res) => {
   const { category } = req.params
   try{
+    let womenData;
     if(category){
       try {
-        const filterwomenData=await ProductModel.find({category});
-        res.status(200).send({filterwomenData})
+        womenData=await ProductModel.find({
+          type: "women",
+          category: category 
+        });
+        res.status(200).send({womenData})
       } catch (error) {
         res.status(500).send({"err":err.message})
       }
 
     }
-    const womenData= await ProductModel.find({type:"women"})
+     womenData= await ProductModel.find({type:"women"})
     res.status(200).send({"womenData":womenData})
   }catch(err){
     res.status(500).send({"err":err.message})
   }
   
 });
+
 
 productRouter.get("/:id", auth,async (req,res)=>{
   const {id}=req.params;
