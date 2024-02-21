@@ -3,8 +3,6 @@ const { ProductModel } = require("../models/Products.model");
 const productRouter = express.Router();
 const jwt = require("jsonwebtoken");
 const {auth}=require("../middlewares/auth")
-// const { getSingleProduct } = require("../../frontend/src/Redux/Product/action");
-
 
 productRouter.post("/add",async(req,res)=>{
   const payload=req.body;
@@ -81,6 +79,26 @@ productRouter.get("/women", async (req, res) => {
   
 });
 
+productRouter.get("/suggestions", async (req, res) => {
+  const {query} = req.query;
+  console.log(query);
+
+  try {
+    if(query){
+      const suggestions = await ProductModel.find({
+        $or: [
+          { title: { $regex: new RegExp(query, 'i') } }, 
+          { category: { $regex: new RegExp(query, 'i') } }
+        ]
+      }).limit(5)
+      res.status(200).send({suggestions})
+    }else{
+      res.status(400).send({ error: "Query parameter 'query' is required." });
+    }
+  } catch (error) {
+    
+  }
+});
 
 productRouter.get("/:id", auth,async (req,res)=>{
   const {id}=req.params;
@@ -115,19 +133,7 @@ productRouter.get("/sort", async (req, res) => {
   }
 });
 
-productRouter.get("/search", async (req, res) => {
-  const query = req.query;
-  console.log(query);
 
-  try {
-    const data = await ProductModel.find({
-      title: { $regex: query.title, $options: "i" },
-    });
-    res.status(200).send(data);
-  } catch (error) {
-    res.status(400).send({ msg: error.message });
-  }
-});
 
 productRouter.post("/add", async (req, res) => {
   try {
