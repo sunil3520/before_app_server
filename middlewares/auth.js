@@ -8,7 +8,6 @@ const auth = (req, res, next) => {
 
   if (token) {
     const decoded = jwt.verify(token, process.env.PRIVATE_KEY);
-    console.log("decoded", decoded);
     if (decoded) {
       req.body.USER_ID = decoded.USER_ID;
       next();

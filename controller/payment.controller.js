@@ -18,7 +18,6 @@ const instance = new Razorpay({
       
     };
     const order = await instance.orders.create(options);
-     console.log(order);
     res.status(200).json({
       success: true,
       order,
@@ -57,10 +56,10 @@ const instance = new Razorpay({
       razorpay_signature,
     });
 
-    // res.status(200).send({"isAuthentic":isAuthentic})
-    res.redirect(
-      `${process.env.FRONTEND_DEPLOYMENT_URL}/paymentsuccess?reference=${razorpay_payment_id}`  
-    );
+    res.status(200).send({"isAuthentic":isAuthentic,razorpay_payment_id})
+    // res.redirect(
+    //   `${"http://localhost:3000"}/paymentsuccess?reference=${razorpay_payment_id}`  
+    // );
   } else {
     res.status(400).json({
       success: false,
