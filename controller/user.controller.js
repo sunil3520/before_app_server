@@ -110,11 +110,9 @@ const registerFun = async (req, res) => {
 
       if (result) {
         const token = jwt.sign({ USER_ID: user._id }, process.env.PRIVATE_KEY, {
-          expiresIn: "30d",
+          expiresIn: "24h",
         });
-        req.session.token = token;
-        console.log(req.session);
-        // Set the token as a cookie with a 30-day expiration
+      
         return res.status(200).send({
           msg: "Login successful",
           token: token,

@@ -20,13 +20,7 @@ const app = express()
 app.use(express.json()) 
 app.use(express.urlencoded({ extended: true }));
 app.use(cors())
-app.use(
-  cookieSession({
-    name: "session",
-    keys: ["secret-key"],
-    maxAge: 30 * 60 * 1000, // Cookie expiration time (30 minute)
-  })
-);
+
 
  app.get("/",(req,res)=>{
   res.status(201).send({msg:"Welcome to Befour application"})

@@ -158,7 +158,6 @@ CartRouter.get("/totalDiscountPrice", auth, async (req, res) => {
     if (totalDiscountPrice.length === 0) {
       return res.status(404).json({ msg: "No products found in the cart" });
     }
-    console.log(totalDiscountPrice);
     res
       .status(200)
       .json({ totalDiscountPrice: totalDiscountPrice[0].totalDiscountPrice });
@@ -185,7 +184,6 @@ CartRouter.get("/totalCartProduct", auth, async (req, res) => {
     if (totalCartProduct.length === 0) {
       return res.status(404).json({ msg: "No products found in the cart" });
     }
-    console.log(totalCartProduct);
     res
       .status(200)
       .json({ totalCartProduct: totalCartProduct[0].totalCartProduct });
